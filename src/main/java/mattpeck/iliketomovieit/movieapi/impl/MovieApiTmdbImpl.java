@@ -25,6 +25,7 @@ import mattpeck.iliketomovieit.movieapi.MovieApi;
  */
 public class MovieApiTmdbImpl implements MovieApi {
 
+	private static final String API_KEY = "6e940a50f408c433af4fea8a64699b5f";
 	private final HttpService httpService;
 
 
@@ -42,7 +43,7 @@ public class MovieApiTmdbImpl implements MovieApi {
 		final String cleansed = title.trim().replaceAll(" +", "+");
 		final List<Movie> movies = Lists.newLinkedList();
 
-		final String string = httpService.get("http://api.themoviedb.org/3/search/movie?api_key=6e940a50f408c433af4fea8a64699b5f&query=" + cleansed, 20000);
+		final String string = httpService.get("http://api.themoviedb.org/3/search/movie?api_key=" + API_KEY + "&query=" + cleansed, 20000);
 
 		final JsonArray searchResults = new JsonParser().parse(string).getAsJsonObject().get("results").getAsJsonArray();
 
@@ -54,8 +55,8 @@ public class MovieApiTmdbImpl implements MovieApi {
 				break;
 			}
 
-			final String movie = httpService.get("http://api.themoviedb.org/3/movie/" + result.getAsJsonObject().get("id").getAsString() + "?api_key=6e940a50f408c433af4fea8a64699b5f", 20000);
-			final String credits = httpService.get("http://api.themoviedb.org/3/movie/" + result.getAsJsonObject().get("id").getAsString() + "/credits?api_key=6e940a50f408c433af4fea8a64699b5f", 20000);
+			final String movie = httpService.get("http://api.themoviedb.org/3/movie/" + result.getAsJsonObject().get("id").getAsString() + "?api_key=" + API_KEY, 20000);
+			final String credits = httpService.get("http://api.themoviedb.org/3/movie/" + result.getAsJsonObject().get("id").getAsString() + "/credits?api_key=" + API_KEY, 20000);
 
 			final JsonObject movieJson = new JsonParser().parse(movie).getAsJsonObject();
 			final JsonObject creditsJson = new JsonParser().parse(credits).getAsJsonObject();
