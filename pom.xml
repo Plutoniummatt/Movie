@@ -70,7 +70,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>mattpeck.ksubakainterview.iliketomovieit.Main</mainClass>
+							<mainClass>mattpeck.iliketomovieit.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
