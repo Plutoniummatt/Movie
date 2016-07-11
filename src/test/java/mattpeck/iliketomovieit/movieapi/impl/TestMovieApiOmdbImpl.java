@@ -3,6 +3,7 @@ package mattpeck.iliketomovieit.movieapi.impl;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -15,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 import mattpeck.iliketomovieit.http.HttpException;
 import mattpeck.iliketomovieit.http.HttpService;
 import mattpeck.iliketomovieit.movieapi.Movie;
-import mattpeck.iliketomovieit.movieapi.impl.MovieApiOmdbImpl;
 
 /**
  * Test class for {@link MovieApiOmdbImpl}
@@ -72,6 +72,17 @@ public class TestMovieApiOmdbImpl {
 		assertEquals("Charles Scott IV, Alex Theurer", movies.get(2).getDirector());
 		assertEquals("Empire of the Sun: Alive", movies.get(2).getTitle());
 		assertEquals("tt5311112", movies.get(2).getUniqueId());
+	}
+
+
+	/**
+	 * Tests that if the movie is not found, an empty movie list is returned
+	 */
+	@Test
+	public void testMovieNotFound() throws HttpException {
+		when(mockHttpService.get(eq("http://www.omdbapi.com/?s=NOPE&y=&plot=short&r=json&type=movie"), anyLong())).thenReturn("{\"Response\":\"False\",\"Error\":\"Movie not found!\"}");
+
+		assertEquals(0, toTest.getMovies("NOPE").size());
 	}
 
 

@@ -2,6 +2,8 @@ package mattpeck.iliketomovieit.movieapi.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -39,8 +41,13 @@ public class MovieApiOmdbImpl implements MovieApi {
 		final List<Movie> movies = Lists.newLinkedList();
 
 		final String string = httpService.get("http://www.omdbapi.com/?s=" + cleansed + "&y=&plot=short&r=json&type=movie", 20000);
+		final JsonObject jsonObject = new JsonParser().parse(string).getAsJsonObject();
 
-		final JsonArray searchResults = new JsonParser().parse(string).getAsJsonObject().get("Search").getAsJsonArray();
+		if (jsonObject.has("Error") && StringUtils.equals(jsonObject.get("Error").getAsString(), "Movie not found!")) {
+			return Lists.newLinkedList();
+		}
+
+		final JsonArray searchResults = jsonObject.get("Search").getAsJsonArray();
 
 		int i = 0;
 		for (final JsonElement result : searchResults) {
